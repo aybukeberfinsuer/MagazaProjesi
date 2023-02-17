@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DbEntityUrunModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Tbl_Kategori">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Ad" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Tbl_Urunler" Relationship="Self.FK_Tbl_Urunler_Tbl_Kategori" FromRole="Tbl_Kategori" ToRole="Tbl_Urunler" />
+  </EntityType>
+  <EntityType Name="Tbl_Musteriler">
+    <Key>
+      <PropertyRef Name="MusteriId" />
+    </Key>
+    <Property Name="MusteriId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MusteriAd" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MusteriSoyad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Sehir" Type="String" MaxLength="14" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Tbl_Satis" Relationship="Self.FK_Tbl_Satis_Tbl_Musteriler" FromRole="Tbl_Musteriler" ToRole="Tbl_Satis" />
+    <Property Name="Durum" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="Tbl_Satis">
+    <Key>
+      <PropertyRef Name="SatisId" />
+    </Key>
+    <Property Name="SatisId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Urun" Type="Int32" />
+    <Property Name="Musteri" Type="Int32" />
+    <Property Name="Fiyat" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Tarih" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="Tbl_Musteriler" Relationship="Self.FK_Tbl_Satis_Tbl_Musteriler" FromRole="Tbl_Satis" ToRole="Tbl_Musteriler" />
+    <NavigationProperty Name="Tbl_Urunler" Relationship="Self.FK_Tbl_Satis_Tbl_Urunler" FromRole="Tbl_Satis" ToRole="Tbl_Urunler" />
+  </EntityType>
+  <EntityType Name="Tbl_Urunler">
+    <Key>
+      <PropertyRef Name="UrunId" />
+    </Key>
+    <Property Name="UrunId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UrunAd" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Marka" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Stok" Type="Int16" />
+    <Property Name="Fiyat" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Durum" Type="Boolean" />
+    <Property Name="Kategori" Type="Int32" />
+    <NavigationProperty Name="Tbl_Kategori" Relationship="Self.FK_Tbl_Urunler_Tbl_Kategori" FromRole="Tbl_Urunler" ToRole="Tbl_Kategori" />
+    <NavigationProperty Name="Tbl_Satis" Relationship="Self.FK_Tbl_Satis_Tbl_Urunler" FromRole="Tbl_Urunler" ToRole="Tbl_Satis" />
+  </EntityType>
+  <Association Name="FK_Tbl_Urunler_Tbl_Kategori">
+    <End Role="Tbl_Kategori" Type="Self.Tbl_Kategori" Multiplicity="0..1" />
+    <End Role="Tbl_Urunler" Type="Self.Tbl_Urunler" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Kategori">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Tbl_Urunler">
+        <PropertyRef Name="Kategori" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_Satis_Tbl_Musteriler">
+    <End Role="Tbl_Musteriler" Type="Self.Tbl_Musteriler" Multiplicity="0..1" />
+    <End Role="Tbl_Satis" Type="Self.Tbl_Satis" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Musteriler">
+        <PropertyRef Name="MusteriId" />
+      </Principal>
+      <Dependent Role="Tbl_Satis">
+        <PropertyRef Name="Musteri" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_Satis_Tbl_Urunler">
+    <End Role="Tbl_Urunler" Type="Self.Tbl_Urunler" Multiplicity="0..1" />
+    <End Role="Tbl_Satis" Type="Self.Tbl_Satis" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Urunler">
+        <PropertyRef Name="UrunId" />
+      </Principal>
+      <Dependent Role="Tbl_Satis">
+        <PropertyRef Name="Urun" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DbEntityUrunEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Tbl_Kategori" EntityType="Self.Tbl_Kategori" />
+    <EntitySet Name="Tbl_Musteriler" EntityType="Self.Tbl_Musteriler" />
+    <EntitySet Name="Tbl_Satis" EntityType="Self.Tbl_Satis" />
+    <EntitySet Name="Tbl_Urunler" EntityType="Self.Tbl_Urunler" />
+    <AssociationSet Name="FK_Tbl_Urunler_Tbl_Kategori" Association="Self.FK_Tbl_Urunler_Tbl_Kategori">
+      <End Role="Tbl_Kategori" EntitySet="Tbl_Kategori" />
+      <End Role="Tbl_Urunler" EntitySet="Tbl_Urunler" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_Satis_Tbl_Musteriler" Association="Self.FK_Tbl_Satis_Tbl_Musteriler">
+      <End Role="Tbl_Musteriler" EntitySet="Tbl_Musteriler" />
+      <End Role="Tbl_Satis" EntitySet="Tbl_Satis" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_Satis_Tbl_Urunler" Association="Self.FK_Tbl_Satis_Tbl_Urunler">
+      <End Role="Tbl_Urunler" EntitySet="Tbl_Urunler" />
+      <End Role="Tbl_Satis" EntitySet="Tbl_Satis" />
+    </AssociationSet>
+    <FunctionImport Name="MarkaGetir" ReturnType="Collection(String)" />
+    <EntitySet Name="Tbl_Kullanici" EntityType="DbEntityUrunModel.Tbl_Kullanici" />
+  </EntityContainer>
+  <EntityType Name="Tbl_Kullanici">
+    <Key>
+      <PropertyRef Name="AdminId" />
+    </Key>
+    <Property Name="AdminId" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AdminKullanici" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="AdminSifre" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+  </EntityType>
+</Schema>
